@@ -7,16 +7,38 @@ root.resizable(0, 0)
 # Top Input Label
 InputLabel = tk.Label(root, text="", font=("Courier", 15), width=42, height=5, borderwidth=2, relief="solid")
 
-#InputLabel.config(text="5")
-#InputLabel.cget("text")
+operatorOnly = False
+numOnly = False
 
-optrOnly = False
+# inputLogic function evaluates problems; it's the main source of error prevention
+def inputLogic():
+    global numOnly
+
+    try:
+        if len(InputLabel.cget("text")) >= 3:
+            int(InputLabel.cget("text")[len(InputLabel.cget("text")) - 2])
+    except:
+        numOnly = True
+    else:
+        numOnly = False
 
 # inputMath function for inputting numbers 0-9 into equation
 def inputMath(inp):
-    InputLabel.config(text=InputLabel.cget("text") + inp)
+    inputLogic()
 
+    if numOnly:
+        try:
+            int(inp)
+        except:
+            print("You cannot enter two operators in a row!")
+        else:
+            InputLabel.config(text=InputLabel.cget("text") + inp)
+    else:
+        InputLabel.config(text=InputLabel.cget("text") + inp)
+
+#computerMath function to compute the equation that's already in the InputLabel
 def computeMath():
+    inputLogic()
     InputLabel.config(text=str(eval(InputLabel.cget("text"))))
 
 # Number Buttons
