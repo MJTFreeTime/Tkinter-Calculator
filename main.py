@@ -16,6 +16,7 @@ def inputLogic():
     global equation
     global numOnly
 
+    # Set numOnly to True if it finds that the last character in equation was an operator, not and int; otherwise False
     try:
         if len(equation) >= 3:
             if equation[len(equation) - 2] != " ":
@@ -30,6 +31,7 @@ def inputMath(inp):
     global equation
     inputLogic()
 
+    # If numOnly is true we check if inp is an operator; if it is, then error, and if not, then concat inp onto InputLabel
     if numOnly:
         if len(inp) >= 3:
             print("You cannot enter two operators in a row!")
