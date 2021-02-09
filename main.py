@@ -10,6 +10,7 @@ InputLabel = tk.Label(root, text="", font=("Courier", 15), width=42, height=5, b
 equation = ""
 operatorOnly = False
 numOnly = False
+answer = False
 
 # inputLogic function evaluates problems; it's the main source of error prevention
 def inputLogic():
@@ -29,25 +30,36 @@ def inputLogic():
 # inputMath function for inputting numbers 0-9 into equation
 def inputMath(inp):
     global equation
+    global answer
     inputLogic()
 
     # If numOnly is true we check if inp is an operator; if it is, then error, and if not, then concat inp onto InputLabel
     if numOnly:
         if len(inp) >= 3:
             print("You cannot enter two operators in a row!")
-        else:
-            equation = equation + inp
-            InputLabel.config(text=equation)
-    else:
-        equation = equation + inp
-        InputLabel.config(text=equation)
+            return
+    
+    if answer == True:
+        if len(inp) < 3:
+            clearEquation()
+        answer = False
+
+    equation = equation + inp
+    InputLabel.config(text=equation)
 
 #computerMath function to compute the equation that's already in the InputLabel
 def computeMath():
     global equation
+    global answer
     inputLogic()
 
     equation = str(eval(equation))
+    InputLabel.config(text=equation)
+    answer = True
+
+def clearEquation():
+    global equation
+    equation = ""
     InputLabel.config(text=equation)
 
 # Number Buttons
@@ -65,6 +77,8 @@ Button0 = tk.Button(root, text="0", font=("Courier", 50), borderwidth=10, relief
 # Operations Buttons
 EqualButton = tk.Button(root, text="=", font=("Courier", 50), borderwidth=10, width=5, relief="groove", command=computeMath)
 AddButton = tk.Button(root, text="+", font=("Courier", 50), borderwidth=10, width=3, relief="groove", command=lambda: inputMath(" + "))
+MinusButton = tk.Button(root, text="-", font=("Courier", 50), borderwidth=10, width=3, relief="groove", command=lambda: inputMath(" - "))
+ClearButton = tk.Button(root, text="CLR", font=("Courier", 38), borderwidth=10, width=3, relief="groove", bg="red", command=clearEquation)
 
 # Placements
 InputLabel.place(x=0, y=0)
@@ -82,6 +96,8 @@ Button0.place(x=0, y=536)
 
 EqualButton.place(x=280, y=536)
 AddButton.place(x=348, y=116)
+MinusButton.place(x=348, y=256)
+ClearButton.place(x=390, y=0)
 
 
 root.mainloop()
